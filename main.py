@@ -42,6 +42,6 @@ def main(args):
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('env_name', help='环境名称')
-    parser.add_argument('-p', '--project', default=None, help='项目名称')
+    # parser.add_argument('-p', '--project', default=None, help='项目名称')
     args = parser.parse_args()
     main(args)
