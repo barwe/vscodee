@@ -1,5 +1,7 @@
 # 基本功能
 
+目前只写 windows 11 的 
+
 ## create
 
 在 `settings.VSCODE_ENV_DIR` 目录下创建一个隔离环境。
