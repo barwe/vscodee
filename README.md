@@ -10,7 +10,7 @@
 - `ENV_NAME` 要创建的隔离环境名称
 
 可选参数：
-- `-i XX YY ...` 根据 `settings.PRE_EXTENSIONS` 中预设的 key 安装扩展，其中 `base` 是默认必装扩展
+- `-i XX YY ...` 根据 `settings.RECOMMENDED_EXTENSIONS` 中预设的 key 安装扩展，其中 `base` 是默认必装扩展
 
 ## list
 

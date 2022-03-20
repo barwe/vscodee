@@ -3,7 +3,7 @@ import logging
 from os import path
 from typing import Sequence
 
-from settings import PRE_EXTENSIONS
+from settings import RECOMMENDED_EXTENSIONS
 from settings import VSCODE_ENV_DIR
 
 from src.platform import get_vscode_path
@@ -83,4 +83,6 @@ class Environment:
 
     def install_recommended_extensions(self, key: str):
         """安装预设集合中的扩展"""
-        return self.install_extensions(PRE_EXTENSIONS[key])
+        ids = [d['id'] for d in RECOMMENDED_EXTENSIONS[key]['extensions']]
+        print('\n'.join(f' - {x}' for x in ids))
+        return self.install_extensions(ids)

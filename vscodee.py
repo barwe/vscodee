@@ -6,14 +6,14 @@ from os import path
 from argparse import ArgumentParser
 
 from src.utils import p
+from src.smart_table import SmartTable
 from src.environment import Environment
 from src.platform import create_desktop_shortcut as creator
 from src.exceptions import UnsupportedPlatformError
 
-from settings import VSCODE_ENV_DIR
-from settings import PRE_EXTENSIONS
+from settings import RECOMMENDED_EXTENSIONS, VSCODE_ENV_DIR
 
-EXTENSION_KEYS = list(PRE_EXTENSIONS.keys())
+EXTENSION_KEYS = list(RECOMMENDED_EXTENSIONS.keys())
 
 logging.basicConfig(
     level=logging.INFO,
@@ -49,7 +49,6 @@ def create(args):
     
     for k in extension_keys:
         logging.info(f'Start installing {k} extensions ...')
-        print('\n'.join(f' - {x}' for x in PRE_EXTENSIONS[k]))
         success = env.install_recommended_extensions(k)
         if not success:
             logging.error('Some unexpected error occurs!')
@@ -89,6 +88,20 @@ def list(args):
             print(f' - {env}')
 
 
+def show_pre_extensions(args):
+    st = SmartTable([
+        {'key': 'id', 'width': 40},
+        {'key': 'desc', 'width': 80}
+    ])
+    d = RECOMMENDED_EXTENSIONS
+    for k in d.keys():
+        print(f"\n预设集 {k} ({d[k]['desc']})")
+
+        st.clear_rows()
+        for row in d[k]['extensions']:
+            st.add_row_obj(row)
+        st.draw(show_title=False)
+
 if __name__ == '__main__':
     check_platform()
 
@@ -117,6 +130,11 @@ if __name__ == '__main__':
     list_parser = subparsers.add_parser('list', help="列出隔离环境")
     list_parser.set_defaults(func=list)
     list_parser.add_argument('-e', '--env', help='检查某个环境，打印其基本信息')
+
+    # 查看预设的扩展列表
+    ext_parser = subparsers.add_parser('ext', help="查看预设的扩展列表")
+    ext_parser.set_defaults(func=show_pre_extensions)
+    # ext_parser.add_argument('-k', '--set-key', default='base', help='预设的 key')
 
     args = parser.parse_args()
     args.func(args)
