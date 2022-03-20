@@ -1,24 +1,23 @@
-from os import path
-import logging
 import os
+import logging
+from os import path
 from typing import Sequence
 
-from shortcut import get_vscode_path
-from utils import exec_linear_commands
-from extensions import PRE_EXTENSIONS
+from settings import PRE_EXTENSIONS
+from settings import VSCODE_ENV_DIR
 
-
-class EnvExistsError(Exception): pass
-
-
-class DirNotFoundError(Exception): pass
+from src.platform import get_vscode_path
+from src.platform import NULL_DEV
+from src.exceptions import EnvExistsError
+from src.exceptions import DirNotFoundError
+from src.utils import exec_linear_commands
 
 
 class Environment:
     """为不同的开发环境或者项目隔离不同的 vscode 环境"""
     def __init__(self, env: str, open_dir: str = None):
         self.__env_name = env
-        self.__env_path = f"{os.environ['VSCODE_ENV_DIR']}/{env}"
+        self.__env_path = f"{VSCODE_ENV_DIR}/{env}"
 
         self.__open_dir = open_dir
         if self.__open_dir is not None and not path.exists(self.__open_dir):
@@ -78,9 +77,10 @@ class Environment:
         cmd_list = []
         prefix = f'code --extensions-dir {self.__extensions_dir}'
         for id in extension_ids:
-            cmd_list.append(f'{prefix} --install-extension {id}')
-        exec_linear_commands(cmd_list)
+            cmd_list.append(f'{prefix} --install-extension {id} > {NULL_DEV}')
+        return exec_linear_commands(cmd_list)
+
 
     def install_recommended_extensions(self, key: str):
         """安装预设集合中的扩展"""
-        self.install_extensions(PRE_EXTENSIONS[key])
+        return self.install_extensions(PRE_EXTENSIONS[key])

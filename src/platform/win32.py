@@ -1,6 +1,6 @@
 import os
-from typing import Mapping
 import winshell
+from typing import Mapping
 
 def create_link(name: str, options: Mapping[str, any]):
     """Create a desktop link for Windows 10/11.
@@ -29,6 +29,7 @@ def get_vscode_exe_path():
     else:
         raise FileNotFoundError(f'"{default_path}" not found')
 
-
 create_desktop_shortcut = create_link
 get_vscode_path = get_vscode_exe_path
+
+NULL_DEV = 'NUL'
