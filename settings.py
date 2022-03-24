@@ -17,9 +17,7 @@ RECOMMENDED_EXTENSIONS = {
         'desc': 'Python 项目推荐扩展',
         'extensions': [
             {'id': 'njpwerner.autodocstring', 'desc': '快速添加注释文档'},
-            # also 
-            #   ms-python.vscode-pylance
-            #   ms-toolsai.jupyter
+            # also ms-python.vscode-pylance， ms-toolsai.jupyter
             {'id': 'ms-python.python', 'desc': '微软官方提供的扩展'}
         ]
     },
@@ -30,13 +28,21 @@ RECOMMENDED_EXTENSIONS = {
             {'id': 'esbenp.prettier-vscode', 'desc': '代码格式校正'},
             {'id': 'stylelint.vscode-stylelint', 'desc': '样式代码检查'},
             {'id': 'mikestead.dotenv', 'desc': '.env 文件语法高亮'},
-            {'id': 'formulahendry.auto-rename-tag', 'desc': '同时重命名开始标签和结束标签'}
+            {'id': 'formulahendry.auto-rename-tag', 'desc': '同时重命名开始标签和结束标签'},
+            {'id': 'vincaslt.highlight-matching-tag', 'desc': '高亮配对的标签'}
+        ]
+    },
+    'git': {
+        'desc': 'Git 相关插件',
+        'extensions': [
+            {'id': 'eamodio.gitlens', 'desc': '快速查看每一行的提交信息'},
+            {'id': 'mhutchie.git-graph', 'desc': '展示提交树'}
         ]
     }
 }
 
 PRE_EXTENSIONS = {
-   # 下面是按个性化的扩展
+    # 下面是按个性化的扩展
     'vue2': [
         'octref.vetur'
     ],
@@ -60,4 +66,3 @@ PRE_EXTENSIONS = {
 }
 
 ###############################################################################
-
