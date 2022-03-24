@@ -1,3 +1,5 @@
+import subprocess
+from glob import glob
 import os
 import logging
 from os import path
@@ -8,16 +10,21 @@ from settings import VSCODE_ENV_DIR
 
 from src.platform import get_vscode_path
 from src.platform import NULL_DEV
+from src.platform import VSCODEE_HOME
 from src.exceptions import EnvExistsError
 from src.exceptions import DirNotFoundError
-from src.utils import exec_linear_commands
+from src.utils import exec_linear_commands, p
+
+
+ENV_DIR = VSCODEE_HOME if VSCODE_ENV_DIR is None else VSCODE_ENV_DIR
 
 
 class Environment:
     """为不同的开发环境或者项目隔离不同的 vscode 环境"""
+
     def __init__(self, env: str, open_dir: str = None):
         self.__env_name = env
-        self.__env_path = f"{VSCODE_ENV_DIR}/{env}"
+        self.__env_path = f"{ENV_DIR}/{env}"
 
         self.__open_dir = open_dir
         if self.__open_dir is not None and not path.exists(self.__open_dir):
@@ -75,11 +82,24 @@ class Environment:
     def install_extensions(self, extension_ids: Sequence[str]):
         """安装扩展"""
         cmd_list = []
-        prefix = f'code --extensions-dir {self.__extensions_dir}'
+        ext_dir = self.__extensions_dir
+        prefix = f'code --extensions-dir {ext_dir}'
         for id in extension_ids:
-            cmd_list.append(f'{prefix} --install-extension {id} > {NULL_DEV}')
-        return exec_linear_commands(cmd_list)
+            if(len(list(glob(p(ext_dir, id + '-*')))) > 0):
+                logging.info(f'<{id}> Installed and escaped')
+                continue
 
+            cmd = f'{prefix} --install-extension {id} > {NULL_DEV}'
+            try:
+                proc =subprocess.run(cmd, shell=True, timeout=8)
+                code = proc.returncode
+                if code == 0:
+                    logging.info(f'<{id}> Success')
+                else:
+                    logging.error(f'<{id}> Some unexpected error')
+            
+            except subprocess.TimeoutExpired:
+                logging.error(f'<{id}> Timeout')
 
     def install_recommended_extensions(self, key: str):
         """安装预设集合中的扩展"""

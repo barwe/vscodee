@@ -12,3 +12,7 @@ class UnsupportedPlatformError(Exception):
     '''不支持的操作系统'''
     def __init__(self, *args: object) -> None:
         super().__init__(sys.platform)
+
+class CommandNotFoundInPathError(Exception):
+    '''在环境变量中未找到指定命令'''
+    pass

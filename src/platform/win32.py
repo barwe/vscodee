@@ -32,4 +32,8 @@ def get_vscode_exe_path():
 create_desktop_shortcut = create_link
 get_vscode_path = get_vscode_exe_path
 
+# 输出和警告流重定向
 NULL_DEV = 'NUL'
+
+# 隔离环境安装位置
+VSCODEE_HOME = 'D:/.vscode/env'

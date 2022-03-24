@@ -8,10 +8,10 @@ from argparse import ArgumentParser
 from src.utils import p
 from src.smart_table import SmartTable
 from src.environment import Environment
-from src.platform import create_desktop_shortcut as creator
-from src.exceptions import UnsupportedPlatformError
+from src.platform import create_desktop_shortcut
 
-from settings import RECOMMENDED_EXTENSIONS, VSCODE_ENV_DIR
+from settings import RECOMMENDED_EXTENSIONS
+from src.environment import ENV_DIR
 
 EXTENSION_KEYS = list(RECOMMENDED_EXTENSIONS.keys())
 
@@ -21,17 +21,9 @@ logging.basicConfig(
 )
 
 
-# 目前只实现 windows 下的隔离
-def check_platform():
-    if sys.platform == 'win32':
-        return True
-    else:
-        raise UnsupportedPlatformError()
-
-
 def create(args):
     # 检查待创建的环境是否存在
-    env_path = p(VSCODE_ENV_DIR, args.env_name)
+    env_path = p(ENV_DIR, args.env_name)
     if path.exists(env_path):
         x = input('检测到该环境已存在，是否先删除该环境? (y/n): ')
         if x == 'y':
@@ -40,24 +32,21 @@ def create(args):
             return
 
     env = Environment(args.env_name)
-    env.create_shortcut(creator)
+    env.create_shortcut(create_desktop_shortcut)
 
-    extension_keys = ['base']
+    # extension_keys = ['base']
+    extension_keys = []
     for k in args.extension_keys:
         if k not in extension_keys:
             extension_keys.append(k)
     
     for k in extension_keys:
         logging.info(f'Start installing {k} extensions ...')
-        success = env.install_recommended_extensions(k)
-        if not success:
-            logging.error('Some unexpected error occurs!')
-            break
+        env.install_recommended_extensions(k)
     else:
         logging.info('Done!')
 
     print('Now check your desktop to see if there is a wonderful shortcut on it!')
-
 
 
 def remove(args):
@@ -65,12 +54,12 @@ def remove(args):
 
 
 def list(args):
-    all_envs = os.listdir(VSCODE_ENV_DIR)
+    all_envs = os.listdir(ENV_DIR)
     
     # 检查某个环境
     if args.env is not None:
         env = args.env
-        env_dir = p(VSCODE_ENV_DIR, env)
+        env_dir = p(ENV_DIR, env)
         # 不合法的环境名
         if env not in all_envs:
             logging.error(f'"{env}" is not in installed environments!')
@@ -103,8 +92,6 @@ def show_pre_extensions(args):
         st.draw(show_title=False)
 
 if __name__ == '__main__':
-    check_platform()
-
     parser = ArgumentParser()
     subparsers = parser.add_subparsers(help="管理隔离环境")
 
@@ -134,7 +121,6 @@ if __name__ == '__main__':
     # 查看预设的扩展列表
     ext_parser = subparsers.add_parser('ext', help="查看预设的扩展列表")
     ext_parser.set_defaults(func=show_pre_extensions)
-    # ext_parser.add_argument('-k', '--set-key', default='base', help='预设的 key')
 
     args = parser.parse_args()
     args.func(args)

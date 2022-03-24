@@ -1,5 +1,7 @@
 # 将隔离的环境保存到什么地方
-VSCODE_ENV_DIR = 'D:/.vscode/env'
+# windows 默认 D:/.vscode/env
+# linux 默认 $HOME/.vscode/env
+VSCODE_ENV_DIR = None
 
 RECOMMENDED_EXTENSIONS = {
     'base': {
@@ -15,6 +17,9 @@ RECOMMENDED_EXTENSIONS = {
         'desc': 'Python 项目推荐扩展',
         'extensions': [
             {'id': 'njpwerner.autodocstring', 'desc': '快速添加注释文档'},
+            # also 
+            #   ms-python.vscode-pylance
+            #   ms-toolsai.jupyter
             {'id': 'ms-python.python', 'desc': '微软官方提供的扩展'}
         ]
     },
@@ -53,3 +58,6 @@ PRE_EXTENSIONS = {
         'voorjaar.windicss-intellisense'
     ]
 }
+
+###############################################################################
+

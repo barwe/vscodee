@@ -1,6 +1,9 @@
 # 基本功能
 
-目前只写 windows 11 的 
+目前支持的系统（`sys.platform` 取值）:
+
+- `"win32"`
+- `"linux"`
 
 ## create
 

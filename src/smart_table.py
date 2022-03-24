@@ -56,7 +56,8 @@ class SmartTable:
         rows.extend(self.rows)
 
         for r in rows:
-            lines.append('│' + '│'.join(self.col_text(c['key'], r[c['key']]) for c in cs) + '│')
+            # lines.append('│' + '│'.join(self.col_text(c['key'], r[c['key']]) for c in cs) + '│')
+            lines.append('│' + '│'.join(self.col_text(c['key'], r[c['key']]) for c in cs))
             lines.append(f"├{'┼'.join('─' * c['width'] for c in cs)}┤")
 
         lines = lines[:-1]
